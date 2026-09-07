@@ -1,23 +1,22 @@
 services:
   app:
     image: node:22
-    working_dir: /app
+    working_dir: /app/TCB_Notion
     volumes:
       - .:/app
-      - foundry_bin:/root/.foundry
+      - tcb_node_modules:/app/TCB_Notion/node_modules
     ports:
       - "3000:3000"
-    environment:
-      - FOUNDRY_FUZZ_RUNS=256
-      - FOUNDRY_INVARIANT_RUNS=5
-      - FOUNDRY_INVARIANT_DEPTH=25
-    command: bash /app/.base44/start.sh
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    command: bash -c "npm install --silent && node notion-proxy.js"
     healthcheck:
-      test: ["CMD", "bash", "-c", "curl -sf http://localhost:3000/ >/dev/null || exit 1"]
+      test: ["CMD", "bash", "-c", "curl -sf http://localhost:3000/health >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 180s
+      start_period: 30s
 
 volumes:
-  foundry_bin:
+  tcb_node_modules:
