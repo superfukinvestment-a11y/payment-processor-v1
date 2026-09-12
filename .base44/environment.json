@@ -1,6 +1,13 @@
 {
   "previewPort": 3000,
-  "healthPath": "/",
+  "healthPath": "/health",
   "startCommand": "docker compose -f docker-compose.base44.yml up -d",
-  "secrets": []
+  "secrets": [
+    {
+      "name": "NOTION_TOKEN",
+      "description": "Notion Integration Token — holen unter https://www.notion.so/my-integrations → 'New integration' → Token kopieren (sieht aus wie secret_abc123...). Die Datenbanken müssen der Integration freigegeben werden: Notion-Seite → ••• → Connections → Integration hinzufügen.",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    }
+  ]
 }

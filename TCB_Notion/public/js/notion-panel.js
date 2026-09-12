@@ -74,13 +74,25 @@ function accountsClear() {
   notionSetStatus("Token gelöscht");
 }
 
-function updateAccountsStatus() {
+async function updateAccountsStatus() {
   const token = getNotionToken();
   const el = document.getElementById("accounts-status");
   if (token) {
     el.textContent = "● Notion: verbunden";
     el.style.color = "#3fb950";
-  } else {
+    return;
+  }
+  try {
+    const resp = await fetch("/health");
+    const health = await resp.json();
+    if (health.notion_connected) {
+      el.textContent = "● Notion: verbunden (Server-Token)";
+      el.style.color = "#3fb950";
+    } else {
+      el.textContent = "● Nicht verbunden";
+      el.style.color = "#4F6070";
+    }
+  } catch (e) {
     el.textContent = "● Nicht verbunden";
     el.style.color = "#4F6070";
   }
@@ -88,12 +100,21 @@ function updateAccountsStatus() {
 
 /* ── Connect ────────────────────────────── */
 async function notionConnect() {
+  notionSetStatus("Verbinde...");
+  try {
+    const resp = await fetch("/health");
+    const health = await resp.json();
+    if (health.notion_connected) {
+      notionSetConn(true);
+      notionSetStatus("Verbunden" + (getNotionToken() ? "" : " (Server-Token)"));
+      return;
+    }
+  } catch (e) { /* fall through */ }
   if (!getNotionToken()) {
     notionSetConn(false);
     notionSetStatus("Kein Token — oben eingeben");
     return;
   }
-  notionSetStatus("Verbinde...");
   try {
     await notionApi("/api/search", "POST", { page_size: 1 });
     notionSetConn(true);
@@ -206,5 +227,5 @@ function escHtml(s) {
 /* ── Init ───────────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
   updateAccountsStatus();
-  if (getNotionToken()) notionConnect();
+  notionConnect();
 });
