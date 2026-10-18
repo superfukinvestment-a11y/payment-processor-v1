@@ -18,6 +18,7 @@ A dashboard (`TCB_Notion/`) that connects to Notion and exports entries to Googl
 - **Notion panel**: load database entries, search workspace, create new entries, open in Notion
 - **NotebookLM panel**: export Notion entries as Markdown for manual upload to notebooklm.google.com (no public API exists)
 - **Accounts panel**: enter/store Notion Integration Token (saved in browser localStorage, sent as `x-notion-token` header)
+- **Persisted settings (browser localStorage)**: `notion_token` (integration token) and `notion_db_id` (Notion database ID, saved via the "ID speichern" button or on "Projekte laden"). On page load the saved database ID is restored into the input; entries are auto-loaded only when a client-side token is present.
 
 ## How It Runs
 

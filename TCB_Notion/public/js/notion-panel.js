@@ -15,6 +15,24 @@ function setNotionToken(token) {
   localStorage.setItem("notion_token", token);
 }
 
+/* ── Database ID persistence ────────────── */
+function getSavedDbId() {
+  return localStorage.getItem("notion_db_id") || "";
+}
+
+function setSavedDbId(id) {
+  if (id) localStorage.setItem("notion_db_id", id);
+  else localStorage.removeItem("notion_db_id");
+}
+
+function notionSaveDbId() {
+  const id = document.getElementById("notion-db-id").value.trim().replace(/-/g, "");
+  if (!id) return alert("Datenbank-ID eingeben.");
+  setSavedDbId(id);
+  document.getElementById("notion-db-id").value = id;
+  notionSetStatus("Datenbank-ID gespeichert");
+}
+
 /* ── API helper ─────────────────────────── */
 async function notionApi(path, method, body) {
   const token = getNotionToken();
@@ -129,6 +147,8 @@ async function notionConnect() {
 async function notionLoadProjects() {
   notionDbId = document.getElementById("notion-db-id").value.trim().replace(/-/g, "");
   if (!notionDbId) return alert("Datenbank-ID eingeben.");
+  setSavedDbId(notionDbId);
+  document.getElementById("notion-db-id").value = notionDbId;
   notionSetStatus("Lade Projekte...");
   try {
     const data = await notionApi(`/api/databases/${notionDbId}/query`, "POST", { page_size: 100 });
@@ -226,6 +246,10 @@ function escHtml(s) {
 
 /* ── Init ───────────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
+  const savedDb = getSavedDbId();
+  if (savedDb) document.getElementById("notion-db-id").value = savedDb;
   updateAccountsStatus();
-  notionConnect();
+  notionConnect().then(() => {
+    if (savedDb && notionConnected && getNotionToken()) notionLoadProjects();
+  });
 });
