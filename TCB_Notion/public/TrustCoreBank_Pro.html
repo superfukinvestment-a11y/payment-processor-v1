@@ -154,6 +154,23 @@
     </div>
   </div>
 
+  <!-- ═══ SLACK PANEL ═══ -->
+  <div class="panel" id="slack-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <div class="panel-icon"><i class="fab fa-slack" style="color:#E01E5A;font-size:14px;"></i></div>
+        <div>
+          <div class="panel-name">Slack-Benachrichtigung</div>
+          <div class="panel-sub conn-dot" id="slack-status">● Wird geprüft...</div>
+        </div>
+      </div>
+      <button onclick="slackTest()" class="btn-gold">Test senden</button>
+    </div>
+    <div id="slack-info" style="font-size:9px;color:var(--dim);line-height:1.7;">
+      Meldet automatisch, sobald ein Notion-Eintrag auf „Erledigt“ gesetzt wird.
+    </div>
+  </div>
+
   <!-- ═══ NOTEBOOKLM PANEL ═══ -->
   <div class="panel" id="notebooklm-panel">
     <div class="panel-header">
@@ -213,5 +230,6 @@
 
 <script src="js/notion-panel.js"></script>
 <script src="js/notebooklm-panel.js"></script>
+<script src="js/slack-panel.js"></script>
 </body>
 </html>

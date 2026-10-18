@@ -30,6 +30,7 @@ function notionSaveDbId() {
   if (!id) return alert("Datenbank-ID eingeben.");
   setSavedDbId(id);
   document.getElementById("notion-db-id").value = id;
+  slackSyncDatabase(id);
   notionSetStatus("Datenbank-ID gespeichert");
 }
 
@@ -149,6 +150,7 @@ async function notionLoadProjects() {
   if (!notionDbId) return alert("Datenbank-ID eingeben.");
   setSavedDbId(notionDbId);
   document.getElementById("notion-db-id").value = notionDbId;
+  slackSyncDatabase(notionDbId);
   notionSetStatus("Lade Projekte...");
   try {
     const data = await notionApi(`/api/databases/${notionDbId}/query`, "POST", { page_size: 100 });

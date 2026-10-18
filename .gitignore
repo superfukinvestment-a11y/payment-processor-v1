@@ -26,3 +26,5 @@ docs/
 .env*
 
 broadcast
+# TrustCoreBank runtime state
+TCB_Notion/data/

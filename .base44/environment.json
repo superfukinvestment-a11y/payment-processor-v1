@@ -8,6 +8,12 @@
       "description": "Notion Integration Token — holen unter https://www.notion.so/my-integrations → 'New integration' → Token kopieren (sieht aus wie secret_abc123...). Die Datenbanken müssen der Integration freigegeben werden: Notion-Seite → ••• → Connections → Integration hinzufügen.",
       "requiredAtBoot": false,
       "generatedForDevelopment": false
+    },
+    {
+      "name": "SLACK_WEBHOOK_URL",
+      "description": "Slack Incoming Webhook URL für die Benachrichtigung bei erledigten Projekten — in Slack: https://api.slack.com/apps → 'Create New App' → 'Incoming Webhooks' aktivieren → 'Add New Webhook to Workspace' → Kanal wählen → URL kopieren (https://hooks.slack.com/services/...).",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
     }
   ]
 }
