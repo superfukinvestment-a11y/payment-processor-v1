@@ -1,0 +1,30 @@
+# Base44 sandbox environment for the Payment Processor contracts repo.
+# Runs the Foundry toolchain from .base44/Dockerfile against the bind-mounted
+# source, so edits are compiled on the next change — no image rebuild needed.
+services:
+  contracts:
+    build:
+      context: ./.base44
+    working_dir: /app
+    volumes:
+      - .:/app
+      - forge_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      # Preview-only tuning: the repo's committed profile fuzzes 10k runs / 50x250
+      # invariants, which is too slow for an interactive preview. CI keeps defaults.
+      - FOUNDRY_FUZZ_RUNS=256
+      - FOUNDRY_INVARIANT_RUNS=10
+      - FOUNDRY_INVARIANT_DEPTH=50
+    command: ["sh", "/app/.base44/start.sh"]
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+volumes:
+  forge_node_modules:
